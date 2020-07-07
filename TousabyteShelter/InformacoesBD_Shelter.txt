@@ -1,0 +1,268 @@
+----------------------------------------------------------------------------------------------------
+1dadaa22-42dd-44fd-8ea5-d881b9f21d39	FELIPE CORTEZÃO
+2ccd0d78-1e6a-4a91-b8b7-2609287d9d46	INGRID
+53867719-1636-4474-a303-7bcd3d38217a	LIA TARSYA
+d9de8a8c-baf8-4bbd-bd91-5f7d927cca9a	CARLOS MARQUES
+----------------------------------------------------------------------------------------------------
+2e6070f9-7be9-4338-b1e8-02e8172fa5c8	Culto Juventude Revival (Aos sábados, das 19:30 às 21:00)
+76e5e2e4-0915-4c06-af43-2ad826d3cfe1	Culto de Celebração (Aos domingos, das 10:30 às 12:00)
+80ea6068-02ab-48fd-8487-70b216150d12	Culto de Celebração (Aos domingos, das 08:30 às 10:00)
+ae92597e-386e-424a-8aa0-53b40623b199	Culto de Celebração (Aos domingos, das 17:00 às 19:00)
+----------------------------------------------------------------------------------------------------
+ED3123F70868E92ED60B11FFDE764EC9	abc123
+6C02974BA1AF6E299C19B3D2FA57AD50	a1234567
+B9BBFB114D0C45685959D34141196E4C	J35u5Cr15t0
+
+------------------
+Todas as telas:
+------------------
+	- Elaborar métodos e funções genéricas para todas as telas:
+		- Validação de usuário logado
+		- Validação de permissão de usuário ao módulo:
+		- Validação (block) de checagem de permissão para os botões: Salvar, Adicionar, Forms, etc...
+
+------------------
+Eventos:
+------------------
+
+
+-----------------------------------------------------
+Privilégios especiais para usuários com perfil Admin:
+-----------------------------------------------------
+
+
+--------------
+Usuários:
+--------------
+
+
+--------------
+Login:
+--------------
+	- Criar tela de mudança de senha
+	- Se senha for em branco ou a1234567, exigir troca de 
+	- Criar Reset Password
+	- Forçar trocar a senha. Bloquear a saída da tela de Alteração de Senha sem alterar.
+
+
+------------------
+Selecionar Evento:
+------------------
+
+
+
+
+----------------------
+DONE
+----------------------
+- Eventos:
+	- Incluir campo: Evento Realizado?	
+	- Se o campo ClosedEvent for verdadeiro, bloquear edição
+	- Incluir, automaticamente, os eventos do dia.
+- Login:
+	- Incluir Session.U000_IsAdmin
+	- Super Usuário cfsmarques com senha independente
+- Selecionar Evento:
+	- Incluir coluna: Total de pessoas do culto
+	- Mostrar quantidade de visitantes
+- Todas as Telas:
+	- Validar se todas as tabelas estão filtradas corretamente
+	- Status
+	- Deletado
+	- Corrigir o filtro de cada tela
+	- Ajustar o conteúdo dos Combobox
+	- Implementar se o usuário tem acesso ao módulo
+	- Inserir o campo "Ativo" somente para os usuários com perfil Admin
+	- Testar privilégios do usuário Admin
+	- Testar (validar) campo: Status
+	- Retirar referência a módulos pra cima. Cada módulo só pode ter "referência" para o(s) módulo(s) abaixo, seguindo o padrão MVC
+	- Revisar campos do tipo Identifier em todas as tabelas
+	- Revisar campos UNIQUE
+	- Limpar os filtros diretos das tabelas nos módulos DATA
+	- Adicionar AllExceptions em todas as partes de todos os módulos
+	- Select * ( Colocar a tabela entre chaves )
+	- Aplicar os recursos: Allow Select, Insert, Update, Delete
+		- Botão Adicionar
+		- Botão Salvar
+		- Formulário
+		- Select
+		- Insert
+		- Update
+		- Delete
+Usuários:
+	- Criar tela de cadastro de usuários
+	- Perfil de Usuários
+	- *Cadastro de Módulos
+
+
+=====================================================================
+U000_IsAdmin = True
+or
+(
+    TSBYT_Status = "A"
+    and
+        (
+            Session.P003_AllowInsert = True
+            or Session.P003_AllowUpdate = True
+)
+    )
+=====================================================================
+
+
+
+
+INSERT INTO
+    {Profiles_P003}
+        (
+            {Profiles_P003}.[U000_AccessKey],
+            {Profiles_P003}.[M000_ID],
+            {Profiles_P003}.[P003_AllowSelect],
+            {Profiles_P003}.[TSBYT_Status],
+            {Profiles_P003}.[TSBYT_IsDeleted],
+            {Profiles_P003}.[TSBYT_InsertedUserID],
+            {Profiles_P003}.[TSBYT_InsertedDate]
+        )
+    VALUES
+        (
+            @U000_AccessKey,
+            @M000_ID,
+            0,
+            'A',
+            0,
+            @U000_AccessKeyLogged,
+            GETDATE()
+        )
+WHERE
+    (
+        SELECT 
+            1
+        FROM
+            {Profiles_P003}
+        WHERE
+            {Profiles_P003}.[U000_AccessKey] = @U000_AccessKey
+            and {Profiles_P003}.[M000_ID] = @M000_ID
+            and {Profiles_P003}.[TSBYT_Status] = 'A'
+            and {Profiles_P003}.[TSBYT_IsDeleted] = 0
+    ) = NULL
+;
+
+Session.U000_IsAdmin = True
+or
+(
+    E002_ClosedEvent = False
+    and TSBYT_Status = "A"
+    and 
+    (
+        Session.P003_AllowInsert
+        or Session.P003_AllowUpdate
+    )
+)
+
+
+
+
+
+
+===========================================================
+SELECT
+    {EventTypes_E001}.*,
+    {Events_E002}.*
+FROM
+    {EventTypes_E001}
+LEFT JOIN
+    {Events_E002}
+        ON
+            {Events_E002}.[E001_AccessKey] = {EventTypes_E001}.[E001_AccessKey]
+WHERE
+    (
+        CASE    -- Domingos
+            WHEN DATEPART(WEEKDAY, GETDATE()) = 1 AND {EventTypes_E001}.[E001_IsOnSundays] = 1 THEN 1
+            ELSE 0
+        END = 1
+        OR 
+            CASE    -- Segundas
+                WHEN DATEPART(WEEKDAY, GETDATE()) = 2 AND {EventTypes_E001}.[E001_IsOnMondays] = 1 THEN 1
+                ELSE 0
+            END = 1
+        OR 
+            CASE    -- Terças
+                WHEN DATEPART(WEEKDAY, GETDATE()) = 3 AND {EventTypes_E001}.[E001_IsOnTuesdays] = 1 THEN 1
+                ELSE 0
+            END = 1
+        OR 
+            CASE    -- Quartas
+                WHEN DATEPART(WEEKDAY, GETDATE()) = 4 AND {EventTypes_E001}.[E001_IsOnWednesdays] = 1 THEN 1
+                ELSE 0
+            END = 1
+        OR 
+            CASE    -- Quintas
+                WHEN DATEPART(WEEKDAY, GETDATE()) = 5 AND {EventTypes_E001}.[E001_IsOnThursdays] = 1 THEN 1
+                ELSE 0
+            END = 1
+        OR 
+            CASE    -- Sextas
+                WHEN DATEPART(WEEKDAY, GETDATE()) = 6 AND {EventTypes_E001}.[E001_IsOnFridays] = 1 THEN 1
+                ELSE 0
+            END = 1
+        OR 
+            CASE    -- Sábados
+                WHEN DATEPART(WEEKDAY, GETDATE()) = 7 AND {EventTypes_E001}.[E001_IsOnSaturdays] = 1 THEN 1
+                ELSE 0
+            END = 1
+    )
+
+    AND {EventTypes_E001}.[TSBYT_Status] = 'A'
+    AND {EventTypes_E001}.[TSBYT_IsDeleted] = 0
+
+    
+    /*
+    AND {Events_E002}.[TSBYT_Status] = 'A'
+    AND {Events_E002}.[TSBYT_IsDeleted] = 0
+    */
+
+    /*
+    AND {Events_E002}.[E001_AccessKey] IS NULL
+    */
+
+;
+===========================================================
+U000_IsAdmin = True
+or
+(
+    TSBYT_Status = "A"
+    and
+        (
+            (UsersU000Id = NullTextIdentifier() and Session.P003_AllowInsert = True)
+            or 
+            (UsersU000Id <> NullTextIdentifier() and Session.P003_AllowUpdate = True
+)
+    ))
+
+
+
+INSERT INTO
+    {Users_U000}
+    (
+        {Users_U000}.[U000_AccessKey],
+        {Users_U000}.[U000_Name],
+        {Users_U000}.[U000_Username],
+        {Users_U000}.[U000_Password],
+        {Users_U000}.[U000_Email],
+        {Users_U000}.[T001_ID_USER_PROFILE],
+        {Users_U000}.[U000_IsAdmin],
+        {Users_U000}.[TSBYT_Status],
+        {Users_U000}.[TSBYT_IsDeleted]
+    )
+VALUES
+    (
+        'd9de8a8c-baf8-4bbd-bd91-5f7d927cca9a',
+        'CARLOS F. S. MARQUES',
+        'cfsmarques',
+        'a123',
+        'cfsmarques@gmail.com',
+        0,
+        1,
+        'A',
+        0
+    )
+;
