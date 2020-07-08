@@ -13,6 +13,11 @@ ED3123F70868E92ED60B11FFDE764EC9	abc123
 6C02974BA1AF6E299C19B3D2FA57AD50	a1234567
 B9BBFB114D0C45685959D34141196E4C	J35u5Cr15t0
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+TO DO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ------------------
 Todas as telas:
 ------------------
@@ -39,10 +44,6 @@ Usuários:
 --------------
 Login:
 --------------
-	- Criar tela de mudança de senha
-	- Se senha for em branco ou a1234567, exigir troca de 
-	- Criar Reset Password
-	- Forçar trocar a senha. Bloquear a saída da tela de Alteração de Senha sem alterar.
 
 
 ------------------
@@ -50,11 +51,17 @@ Selecionar Evento:
 ------------------
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DOING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+--------------
+Usuários:
+--------------
 
 
-----------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 DONE
-----------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 - Eventos:
 	- Incluir campo: Evento Realizado?	
 	- Se o campo ClosedEvent for verdadeiro, bloquear edição
@@ -62,6 +69,10 @@ DONE
 - Login:
 	- Incluir Session.U000_IsAdmin
 	- Super Usuário cfsmarques com senha independente
+	- Criar tela de mudança de senha
+	- Se senha for em branco ou a1234567, exigir troca de 
+	- Criar Reset Password
+	- Forçar trocar a senha. Bloquear a saída da tela de Alteração de Senha sem alterar.
 - Selecionar Evento:
 	- Incluir coluna: Total de pessoas do culto
 	- Mostrar quantidade de visitantes
@@ -93,6 +104,9 @@ Usuários:
 	- Criar tela de cadastro de usuários
 	- Perfil de Usuários
 	- *Cadastro de Módulos
+	- Permitir data de nascimento em branco;
+	- Colocar os visitantes em ordem alfabética;
+	- Ajustar a data do título do evento na tela de visitantes
 
 
 =====================================================================
